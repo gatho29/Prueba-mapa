@@ -1,0 +1,31 @@
+.contenedor {
+    width: 20%;
+    height: 100vh;
+    background-color: #eaecee;
+
+    .contendor-menu {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+
+        .lista-menu {
+            margin-top: 5px;
+            margin-bottom: 0rem;
+            width: 81%;
+            padding: 8px;
+            margin-left: 4rem;
+
+            &:hover {
+                background-color: #00bfa647;
+                cursor: pointer;
+            }
+        }
+
+        .icono {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-right: 20px;
+        }
+    }
+}
