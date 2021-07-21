@@ -12,4 +12,5 @@ export class MapaComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
 }
