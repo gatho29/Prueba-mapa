@@ -4,14 +4,13 @@ import { UsuarioLogueadoComponent } from './usuario-logueado/usuario-logueado.co
 import { ServicioUsuarioComponent } from './servicio-usuario/servicio-usuario.component';
 
 
-
 @NgModule({
   declarations: [
     UsuarioLogueadoComponent,
     ServicioUsuarioComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports: [
     UsuarioLogueadoComponent,

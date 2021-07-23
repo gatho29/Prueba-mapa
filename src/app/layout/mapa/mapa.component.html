@@ -1,3 +1,6 @@
-<div class="contenedor">
-    <p>asd</p>
-</div>
+<agm-map class="mapa" (mapReady)="mapPrueba($event)" [latitude]="ubicacionCentral.latitud"
+    [longitude]="ubicacionCentral.longitud" [zoom]="9">
+    <agm-marker *ngFor="let ruta of obtenerMapa" [latitude]="ruta?.origin?.latitud"
+        [longitude]="ruta?.origin?.longitud">
+    </agm-marker>
+</agm-map>

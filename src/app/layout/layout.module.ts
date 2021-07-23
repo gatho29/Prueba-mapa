@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MenuComponent } from './menu/menu.component';
 import { MapaComponent } from './mapa/mapa.component';
 import { NavegacionComponent } from './navegacion/navegacion.component';
-import { ComponentesModule } from '../componentes/componentes.module';
+import { AgmCoreModule } from '@agm/core';
+import { ComponentesModule } from '../shared/componentes/componentes.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { ComponentesModule } from '../componentes/componentes.module';
   ],
   imports: [
     CommonModule,
-    ComponentesModule
+    ComponentesModule,
+    AgmCoreModule.forRoot({ apiKey: "AIzaSyCMvITwU0xc2G5-j_9gF8O4aED5qAbv8K0" }),
+    HttpClientModule,
   ],
   exports: [
     MenuComponent,
