@@ -1,30 +1,16 @@
-.descripcion-usuario {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-    .imagen {
+.user {
+    .image {
         height: 8rem;
-        width: 8rem;
         margin-top: 5rem;
+        width: 8rem;
     }
 
-    .nombre {
-        color: #17202a;
-        margin-top: 1rem;
-        font-size: 1.5rem;
-        font-weight: 500;
-        text-shadow: 0px 1px 2px black;
+    .separator {
+        border-bottom: 2px solid #dadada;
+        width: 35%;
     }
 
-    .beneficiario {
-        color: #abb2b9;
-        margin-bottom: 1rem;
-        line-height: 0px;
-    }
-    .border {
-        border-bottom: 1px solid #abb2b9;
-        margin-top: 3rem;
-        width: 37%;
+    @media only screen and (max-width: 1120px) {
+        display: none !important;
     }
 }

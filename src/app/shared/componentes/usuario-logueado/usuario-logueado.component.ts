@@ -7,9 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class UsuarioLogueadoComponent implements OnInit {
 
-  @Input() nombre: string
-  @Input() beneficiario: string
-  @Input() imagen: string
+  @Input() name: string
+  @Input() role: string
+  @Input() image: string
 
 
   constructor() { }

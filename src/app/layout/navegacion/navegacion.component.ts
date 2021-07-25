@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild } from '@angular/core';
+import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
+import { Address } from 'ngx-google-places-autocomplete/objects/address';
 import { Subscription } from 'rxjs';
 import { MapaServicioService } from 'src/app/shared/servicios/mapa-servicio.service';
 
@@ -7,26 +9,59 @@ import { MapaServicioService } from 'src/app/shared/servicios/mapa-servicio.serv
   templateUrl: './navegacion.component.html',
   styleUrls: ['./navegacion.component.scss']
 })
-export class NavegacionComponent implements OnInit {
+export class NavegacionComponent implements OnInit, OnDestroy {
 
-  mapaSubscripcion: Subscription;
-  obtenerMapa: any;
+  @Output() marker = new EventEmitter();
+  @Output() resetMap = new EventEmitter();
+  @ViewChild("placesRef") placesRef: GooglePlaceDirective;
 
-  constructor(private servicioMapas: MapaServicioService) { }
+  favoriteSubs: Subscription;
+
+  favorites;
+  latitude;
+  longitude;
+
+  options = { types: [], componentRestrictions: { country: 'CO' } }
+
+  constructor(private mapServices: MapaServicioService) { }
 
   ngOnInit(): void {
-    this.obtenerInfoMapas();
+    this.getFavoriteLocations();
   }
 
+  ngOnDestroy(): void {
+    this.favoriteSubs && this.favoriteSubs.unsubscribe();
+  }
 
-  obtenerInfoMapas() {
-    this.mapaSubscripcion = this.servicioMapas.obtenerServicioMapas().subscribe(
-      respuesta => {
-        this.obtenerMapa = respuesta
-        console.log(this.obtenerMapa);
-      },
-      error => console.log(error)
-    );
+  /**
+   * Obtiene las direcciones favoritas
+   */
+  getFavoriteLocations(): void {
+    this.mapServices.getFavoriteLocations()
+      .subscribe(
+        response => this.favorites = response,
+        error => console.log(error)
+      );
+  }
+
+  /**
+   * Envia la ubicacion seleccionada al componente padre
+   * @param location 
+   */
+  setLocation(location) {
+    const latLng = {
+      latitude: location.origin.latitud,
+      longitude: location.origin.longitud,
+    }
+
+    this.marker.emit(latLng);
+  }
+
+  /**
+   * Dispara el evento resetMap que reinica la variable con todos las rutas
+   */
+  dispatchEventResetMap(): void {
+    window.dispatchEvent(new Event('resetMap'));
   }
 
 }

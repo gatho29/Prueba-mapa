@@ -1,15 +1,23 @@
-<div class="contenedor">
-    <app-usuario-logueado nombre="Nell Guerra" beneficiario="Beneficiario"
-        imagen="../../../assets/images/undraw_male_avatar_323b.svg"></app-usuario-logueado>
+<div class="sidebar-container">
+    <app-usuario-logueado name="Nell Guerra" role="Beneficiario"
+        image="../../../assets/images/undraw_male_avatar_323b.svg"></app-usuario-logueado>
 
-    <!-- Menu -->
-    <div class="contendor-menu">
-        <P class="lista-menu"><i class="icono fab fa-usps"></i>Pedir Aguila</P>
-        <P class="lista-menu"><i class="icono fas fa-fighter-jet"></i>Vuelos</P>
-        <P class="lista-menu"><i class="icono fas fa-route"></i>Rutas</P>
-        <P class="lista-menu"><i class="icono fas fa-user-cog"></i>Administrar</P>
-        <P class="lista-menu"><i class="icono fas fa-chart-bar"></i>Estadisticas</P>
-        <P class="lista-menu"><i class="icono fas fa-pager"></i>Medios de pago</P>
-        <P class="lista-menu"><i class="icono fas fa-sign-out-alt"></i>Cerrar sesión</P>
+    <!-- Desktop menu -->
+    <div class="desktop-menu d-flex flex-column mt-4">
+
+        <!-- Items -->
+        <div *ngFor="let menu of itemsMenuDesktop" class="item">
+            <i [ngClass]="menu.icon" class="icon"></i>
+            <label>{{menu.name}}</label>
+        </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu w-100 h-100">
+        <label class="fw-bold px-3 py-1">Nell Guerra</label>
+        <label *ngFor="let menu of itemsMenuMobile" class="mobile-button d-flex px-3 py-1">
+            <i [ngClass]="menu.icon" class="icon"></i>
+            {{ menu.name }}
+        </label>
     </div>
 </div>

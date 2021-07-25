@@ -1,0 +1,21 @@
+.location-container {
+    height: 3rem;
+    gap: 1em;
+    margin: auto;
+
+    .circle {
+        font-size: 13px;
+    }
+
+    .input {
+        border: none;
+        border-bottom: 1px solid #d5d8dc;
+        font-size: 14px;
+        height: 40px;
+    }
+
+    .line {
+        border-left: 2px dotted rgb(146, 146, 146);
+        height: 20px;
+    }
+}

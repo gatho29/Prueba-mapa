@@ -1,15 +1,10 @@
-<p class="franja-gris"></p>
-<div class="cabezera">
-    <div class="contenedor-icono">
-        <i class="icono fas fa-user"></i>
-        <p class="nombre-icono">Para mi</p>
-    </div>
-    <div class="contenedor-icono">
-        <i class="icono fas fa-user-friends"></i>
-        <p class="nombre-icono">Colega</p>
-    </div>
-    <div class="contenedor-icono">
-        <i class="icono fas fa-user-plus"></i>
-        <p class="nombre-icono">Invitado</p>
+<p class="bar w-100"></p>
+
+<div class="services-container d-flex align-items-center justify-content-center shadow">
+    <div *ngFor="let service of serviceUser"
+        class="item-service d-flex flex-column align-items-center justify-content-center">
+        <i [ngClass]="service.icon"
+            class="icon fs-5 rounded-circle d-flex align-items-center justify-content-center"></i>
+        <p class="name text-muted mb-0">{{ service.name }}</p>
     </div>
 </div>

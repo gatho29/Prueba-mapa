@@ -5,6 +5,21 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent {
-  title = 'prueba-mapas';
+
+  location;
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  /**
+   * Obtiene una ubicacion enviado desde un componente hijo
+   * @param location 
+   */
+  getLocation(location) {
+    this.location = location;
+  }
 }

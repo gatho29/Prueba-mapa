@@ -1,54 +1,41 @@
-<div class="contenedor">
+<div class="navigation-container shadow">
     <app-servicio-usuario></app-servicio-usuario>
 
-    <!-- Origenes -->
-    <div class="contenedor-origen">
-        <div class="btn-group me-2" role="group" aria-label="First group">
-            <div class="botones-origenes">
-                <div class="origen1">
-                    <button type="button" class="boton btn btn-primary">1</button>
-                    <p class="titulo-origen">Origen</p>
+    <!-- Origin and destination -->
+    <div class="mt-5 pt-4 px-4">
+        <h1 class="fs-5">¿A donde vamos?</h1>
+
+        <!-- Origin -->
+        <app-autocomplete locationName="origen"></app-autocomplete>
+
+        <!-- Destination -->
+        <app-autocomplete locationName="destino"></app-autocomplete>
+
+        <!-- Go -->
+        <div class="d-flex buttons mt-2">
+            <button class="btn btn-success btn-confirm">Confirmar</button>
+            <button class="btn btn-secondary btn-limpiar ml-4" (click)="dispatchEventResetMap()">Limpiar</button>
+        </div>
+    </div>
+
+
+    <!-- Favorite list -->
+    <div class="mt-3 px-4">
+        <h1 class="fs-5">Favoritos</h1>
+
+        <div class="favorite-list">
+            <div *ngFor="let fav of favorites" class="item-favorite d-flex align-items-center mb-1 px-2 py-2"
+                (click)="setLocation(fav)">
+
+                <!-- Icon -->
+                <i class="icon far fa-star rounded-circle"></i>
+
+                <!-- Address -->
+                <div class="address d-flex flex-column justify-content-center">
+                    <p class="mb-0">{{ fav?.origin?.city }}</p>
+                    <p class="mb-0">{{ fav?.origin?.direction }}</p>
                 </div>
-                <button type="button" class="boton btn btn-primary">2</button>
-                <button type="button" class="boton btn btn-primary">3</button>
-                <button type="button" class="boton btn btn-primary">4</button>
-                <button type="button" class="boton btn btn-primary">5</button>
-                <button type="button" class="boton btn btn-primary">6</button>
             </div>
         </div>
-    </div>
-
-    <!-- Selector -->
-    <div>
-        <select class="selector form-select">
-            <option *ngFor="let direccion of obtenerMapa" value="dirreccion?.origin">{{ direccion?.origin?.city }}
-            </option>
-        </select>
-    </div>
-
-    <!-- Input -->
-    <div>
-        <div class="contenedor-input input-group flex-nowrap">
-            <input type="text" class="input form-control" placeholder="¿Donde te recogemos?"
-                aria-describedby="addon-wrapping">
-        </div>
-    </div>
-
-    <!-- Lista favoritos -->
-    <div>
-        <p class="titulo-favorito">Favoritos</p>
-        <div class="border"></div>
-    </div>
-    <div class="lista-favorito">
-        <div *ngFor="let direccion of obtenerMapa" class="direccion-favorita">
-            <i class="icono far fa-star"></i>
-            <div class="direccion">
-                <p class="titulo-direccion">{{ direccion?.origin?.city }}</p>
-                <p class="detalles-direccion">{{ direccion?.origin?.direction }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="piecera">
-        <button type="button" class="boton btn btn-light"><i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
