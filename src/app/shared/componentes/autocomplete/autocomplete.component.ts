@@ -31,7 +31,7 @@ export class AutocompleteComponent implements OnInit {
       lng: address.geometry.location.lng(),
     }
 
-    localStorage.setItem(this.locationName == 'origin' ? 'origin' : 'destination', JSON.stringify(latLng))
+    localStorage.setItem(this.locationName == 'origin' ? 'origin' : 'destination', JSON.stringify(latLng));
   }
 
 

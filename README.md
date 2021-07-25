@@ -1,27 +1,66 @@
-# PruebaMapas
+# Test-Routes
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+Este es un proyecto que tiene como finalidad mostrar una series de rutas y direcciones en un mapa. 
 
-## Development server
+## Tabla de contenido
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- [Test-Routes](#test-routes)
+  - [Tabla de contenido](#tabla-de-contenido)
+  - [Instalacion](#instalacion)
+  - [Que esta incluido](#que-esta-incluido)
+  - [Documentación](#documentación)
+  - [Buggs](#buggs)
+  - [Creador](#creador)
 
-## Code scaffolding
+## Instalacion
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Una vez descargado y clonado el proyecto se deben instalar las dependencias con el siguiente codigo.
+```
+npm i
+```
+## Que esta incluido 
 
-## Build
+En este proyecto se utilizo librerias y servicios como lo fueron.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```
+Bootstrap(estilos), Fontaweasome(Iconos), @agm/core - npm(iniciaizar el mapa), googleMapsApi(servicio)
+```
+## Documentación
 
-## Running unit tests
+En esta documentación se hara un breve repaso de como se hicieron los puntos a evaluar.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Crear un JSON con un viaje de prueba, utiliza HttpClient para consultar
+el JSON y pintar el viaje en el mapa. Debe pintarse por defecto cuando
+se abre la página web. Eres libre de decidir cómo lo pintas.
 
-## Running end-to-end tests
+- Para este paso, se desarrollo un pequeño Json con ayuda de la siguiente pagina web https://designer.mocky.io/design
+  que luego se consumiria con el HttpClient y proseguir a pintarse las rutas que marcaba las direcciones obtenida por el Json generado.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- Para el marcado de las rutas se utiliza una funcion (detallada en el codigo) y un Polyline (documentacion de googleMapsApi).
+  
+2. Permite seleccionar direcciones definidas inicialmente (Favoritos).
 
-## Further help
+- para este paso se crea un nuevo Json ayudado con la pagina web  https://designer.mocky.io/design y es el que luego se consume para mostrar la lista de favoritos, 
+  y luego se utiliza un market (googleMapsApi) para seleccionar la dirección favorita seleccionada.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+3. Permite navegar entre los pasos 1 (Origen) y 2 (Destino).
+   
+- Para este paso se, propone un nuevo diseño en la vista el cual puede facilitar mas al momento de elegir entre el origen y destino.
+
+4. Con la navegación entre los pasos 1 y 2 cambia la URL.
+
+- Para este paso se hace uso del app-routing mandando rutas parametrizadas.
+
+5. Realiza un diseño responsive que funcione en dispositivos móviles.
+
+- Para el diseño responive se hace uso de los media query (aun esta en proceso).
+## Buggs
+
+1. Al momento de incializar el mapa en ciertas ocaciones no lo carga, se debe actualizar nuevamente la pagina,
+   esto se debe a un problema que viene por defecto del test de prueba de GoogleMapsApi en la version gratuita.
+## Creador
+
+**Nell David Guerra Jimenez**
+
+- <https://github.com/gatho29/Prueba-mapa>
+- <https://www.linkedin.com/in/nell-david-guerra-jim%C3%A9nez-843675206/>
