@@ -1,11 +1,11 @@
 <div class="location-container d-flex align-items-center justify-content-center">
     <div class="d-flex align-items-center flex-column">
         <i class="fas fa-circle circle"
-            [ngClass]="locationName == 'origen' ? 'color-proyect-primary mt-4' : 'text-danger'"></i>
-        <div class="line mt-2" *ngIf="locationName == 'origen'"></div>
+            [ngClass]="locationName == 'origin' ? 'color-proyect-primary mt-4' : 'text-danger'"></i>
+        <div class="line mt-2" *ngIf="locationName == 'origin'"></div>
     </div>
 
     <input ngx-google-places-autocomplete (options)='options' #placesRef="ngx-places"
         (onAddressChange)="autoCompleteGoogleMaps($event)" ngx-google-places-autocomplete class="input form-control"
-        [placeholder]="locationName | titlecase" />
+        [placeholder]="locationName | titlecase" [(ngModel)]="autocomplete" />
 </div>

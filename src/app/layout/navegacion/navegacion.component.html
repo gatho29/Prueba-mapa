@@ -2,18 +2,18 @@
     <app-servicio-usuario></app-servicio-usuario>
 
     <!-- Origin and destination -->
-    <div class="mt-5 pt-4 px-4">
+    <div class="form">
         <h1 class="fs-5">¿A donde vamos?</h1>
 
         <!-- Origin -->
-        <app-autocomplete locationName="origen"></app-autocomplete>
+        <app-autocomplete locationName="origin"></app-autocomplete>
 
         <!-- Destination -->
-        <app-autocomplete locationName="destino"></app-autocomplete>
+        <app-autocomplete locationName="destination"></app-autocomplete>
 
         <!-- Go -->
         <div class="d-flex buttons mt-2">
-            <button class="btn btn-success btn-confirm">Confirmar</button>
+            <button class="btn btn-success btn-confirm" (click)="dispatchDrawRoute()">Confirmar</button>
             <button class="btn btn-secondary btn-limpiar ml-4" (click)="dispatchEventResetMap()">Limpiar</button>
         </div>
     </div>

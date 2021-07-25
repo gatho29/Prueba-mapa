@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnChanges, AfterViewInit, OnDestroy, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MapaServicioService } from 'src/app/shared/servicios/mapa-servicio.service';
 
@@ -9,42 +9,65 @@ declare const google;
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.scss']
 })
-export class MapaComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class MapaComponent implements OnInit, OnDestroy {
 
   @Input() autocomplete;
   @Input() locationUrl;
 
-  routesDataSubs: Subscription;
+  markersDataSubs: Subscription;
 
-  routeMap: any = [];
+  markers: any = [];
+  favoriteMarkers: any = [];
+
   initLatitud = 10.96854;
   initLongitud = -74.78132;
-  zoom = 9;
+  drawedRoute;
+  zoom = 7;
   map;
 
   directionsService = new google.maps.DirectionsService();
 
   constructor(
-    private servicioMapas: MapaServicioService,
-    private route: ActivatedRoute) { }
+    private router: Router,
+    private route: ActivatedRoute,
+    private servicioMapas: MapaServicioService) { }
 
   ngOnInit(): void {
     window.addEventListener('resetMap', () => this.resetData());
+    window.addEventListener('addFavoriteMarker', () => this.addFavoriteMarker());
+    window.addEventListener('drawRoute', () => this.drawRouteFromNavigation());
+
     this.getRouteParams();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['autocomplete'].isFirstChange()) {
-      this.addMarker();
-    }
-  }
-
-  ngAfterViewInit() {
-    this.getUrlLocation()
-  }
-
   ngOnDestroy(): void {
-    this.routesDataSubs && this.routesDataSubs.unsubscribe();
+    this.markersDataSubs && this.markersDataSubs.unsubscribe();
+  }
+
+  /**
+   * Se ejecuta despues de que el mapa cargo completamente
+   * @param event 
+   */
+  mapData(event) {
+    this.map = event;
+
+    this.locationUrl.origin.lat ? this.getUrlLocation() : this.getDataRoute();
+  }
+
+  /**
+   * Obtiene los datos de las direcciones de la api(JSON creado) a ser dibujadas
+   */
+  getDataRoute() {
+    this.markersDataSubs = this.servicioMapas.geRoute()
+      .subscribe(
+        response => {
+          this.markers = response;
+
+          const [origin, destination] = this.markers;
+          this.drawRoute({ lat: origin.origin.latitud, lng: origin.origin.longitud }, { lat: destination.origin.latitud, lng: destination.origin.longitud });
+        },
+        error => console.log(error)
+      );
   }
 
   /**
@@ -53,59 +76,35 @@ export class MapaComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   getRouteParams(): void {
     this.route.params.subscribe(params => {
       this.locationUrl = {
-        origin: {
-          latitude: params.oriLat,
-          longitude: params.oriLng
-        },
-        destination: {
-          latitude: params.desLat,
-          longitude: params.desLng
-        }
+        origin: { lat: params.oriLat, lng: params.oriLng },
+        destination: { lat: params.desLat, lng: params.desLng }
       }
+
+      // TODO: REMOVER LA RUTA ANTERIOR
+      this.removeAllMarkers();
+      this.getUrlLocation();
     });
   }
 
+  /**
+   * Obtiene los datos de ubicacion que son enviados por url
+   */
   getUrlLocation(): void {
-    const origin = {
-      lat: parseFloat(this.locationUrl?.origin?.latitude || 0),
-      lng: parseFloat(this.locationUrl?.origin?.longitude || 0),
+    try {
+      const origin = {
+        lat: parseFloat(this.locationUrl?.origin?.lat || 0),
+        lng: parseFloat(this.locationUrl?.origin?.lng || 0),
+      }
+
+      const destination = {
+        lat: parseFloat(this.locationUrl?.destination?.lat || 0),
+        lng: parseFloat(this.locationUrl?.destination?.lng || 0),
+      }
+
+      this.drawRoute(origin, destination);
+    } catch (e) {
+      console.log(e);
     }
-
-    const destination = {
-      lat: parseFloat(this.locationUrl?.destination?.latitude || 0),
-      lng: parseFloat(this.locationUrl?.destination?.longitude || 0),
-    }
-
-    console.log(origin);
-    console.log(destination);
-
-    this.drawRoute(origin, destination);
-  }
-
-  /**
-   * Funcion que almacena el evento del mapa cuando ya termino de cargar
-   * @param event 
-   */
-  mapData(event) {
-    this.map = event;
-    this.getDataRoute();
-    this.getUrlLocation();
-  }
-
-
-  /**
-   * Obtiene los datos de las direcciones a ser dibujadas
-   */
-  getDataRoute() {
-    this.routesDataSubs = this.servicioMapas.geRoute().subscribe(
-      response => {
-        this.routeMap = response;
-
-        const [origin, destination] = this.routeMap;
-        this.drawRoute({ lat: origin.origin.latitud, lng: origin.origin.longitud }, { lat: destination.origin.latitud, lng: destination.origin.longitud });
-      },
-      error => console.log(error)
-    );
   }
 
   /**
@@ -122,36 +121,70 @@ export class MapaComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
 
     this.directionsService.route(request, (result, status) => {
       if (status === 'OK') {
-        console.log(result.routes[0].overview_path,);
+        this.removeAllMarkers();
 
-        new google.maps.Polyline({
+        this.drawedRoute = new google.maps.Polyline({
           path: result.routes[0].overview_path,
           strokeColor: '#E74C3C',
           strokeWeight: 3,
           map: this.map
         });
 
-        this.routeMap.push(origin);
-        this.routeMap.push(destination);
+        this.addMarker(origin.lat, origin.lng, 9);
+        this.addMarker(destination.lat, destination.lng);
       }
     });
   }
 
   /**
+   * Dibuja una ruta con los datos ingresados en los campos de navegacion
+   */
+  drawRouteFromNavigation(): void {
+    const origin = JSON.parse(localStorage.getItem('origin'));
+    const destination = JSON.parse(localStorage.getItem('destination'));
+
+    const route = `/oriLat/${origin.lat}/oriLng/${origin.lng}/desLat/${destination.lat}/desLng/${destination.lng}`;
+    this.router.navigate([route])
+  }
+
+  /**
    * Agrega un marcador
    */
-  addMarker(): void {
+  addMarker(lat: number, lng: number, zoom?: number): void {
     const marker = {
       origin: {
-        latitud: this.autocomplete?.latitude,
-        longitud: this.autocomplete?.longitude,
+        latitud: lat,
+        longitud: lng,
       }
     }
+    this.markers.push(marker);
 
-    this.routeMap.push(marker);
-    this.initLatitud = marker.origin.latitud;
-    this.initLongitud = marker.origin.longitud;
-    this.zoom = 11;
+    if (zoom) {
+      this.initLatitud = marker.origin.latitud;
+      this.initLongitud = marker.origin.longitud;
+
+      this.zoom = zoom;
+    }
+  }
+
+  /**
+   * Agrega al mapa el marcador de un sitio favorito
+   */
+  addFavoriteMarker(): void {
+    this.favoriteMarkers = JSON.parse(localStorage.getItem('markers'));
+
+    this.favoriteMarkers.length > 0 && this.favoriteMarkers.map(marker => {
+      this.addMarker(marker.lat, marker.lng, 11);
+    })
+  }
+
+  /**
+   * Destruye el observable que trae la informacion de los marcadores a mostrar y borra todo los marcadores
+   */
+  removeAllMarkers(): void {
+    this.markersDataSubs && this.markersDataSubs.unsubscribe();
+    localStorage.clear();
+    this.markers = [];
   }
 
   /**

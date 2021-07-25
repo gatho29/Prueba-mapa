@@ -9,17 +9,16 @@ import { Address } from 'ngx-google-places-autocomplete/objects/address';
 })
 export class AutocompleteComponent implements OnInit {
 
-  @Input() locationName: 'origen' | 'destino';
+  @Input() locationName: 'origin' | 'destination';
   @Output() location = new EventEmitter();
 
-  latitude: number;
-  longitude: number;
-
   options = { types: [], componentRestrictions: { country: 'CO' } }
+  autocomplete;
 
   constructor() { }
 
   ngOnInit(): void {
+    window.addEventListener('resetAutoComplete', () => this.autocomplete = '',);
   }
 
   /**
@@ -27,15 +26,12 @@ export class AutocompleteComponent implements OnInit {
    * @param address 
    */
   public autoCompleteGoogleMaps(address: Address) {
-    this.latitude = address.geometry.location.lat();
-    this.longitude = address.geometry.location.lng();
-
     const latLng = {
-      latitude: this.latitude,
-      longitude: this.longitude,
+      lat: address.geometry.location.lat(),
+      lng: address.geometry.location.lng(),
     }
 
-    this.location.emit(latLng)
+    localStorage.setItem(this.locationName == 'origin' ? 'origin' : 'destination', JSON.stringify(latLng))
   }
 
 

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { UsuarioLogueadoComponent } from './usuario-logueado/usuario-logueado.component';
 import { ServicioUsuarioComponent } from './servicio-usuario/servicio-usuario.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
-import { AgmCoreModule } from '@agm/core';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,6 +16,7 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
   imports: [
     CommonModule,
     GooglePlaceModule,
+    FormsModule
   ],
   exports: [
     UsuarioLogueadoComponent,

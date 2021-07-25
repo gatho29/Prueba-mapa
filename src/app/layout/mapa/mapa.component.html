@@ -1,6 +1,6 @@
 <agm-map class="map" (mapReady)="mapData($event)" [usePanning]="true" [zoom]="zoom" [latitude]="initLatitud"
     [longitude]="initLongitud">
-    <agm-marker *ngFor="let marker of routeMap" [latitude]="marker?.origin?.latitud"
+    <agm-marker *ngFor="let marker of markers" [latitude]="marker?.origin?.latitud"
         [longitude]="marker?.origin?.longitud">
     </agm-marker>
 </agm-map>
